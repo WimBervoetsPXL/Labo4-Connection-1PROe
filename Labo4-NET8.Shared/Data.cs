@@ -61,5 +61,36 @@ namespace Labo4_NET8.Shared
                 //connection.Close(); // <== niet nodig door using! (gebeurt automatisch)
             }
         }
+
+        public static List<FootballClub> GetAllClubs()
+        {
+            List<FootballClub> clubs = new List<FootballClub>();
+            using(SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                string select = "SELECT * FROM FootballClubs";
+                using(SqlCommand command = new SqlCommand(select, connection))
+                {
+                    using(SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while(reader.Read())
+                        {
+                            FootballClub club = new FootballClub()
+                            {
+                                ClubId = reader.GetInt32(0),
+                                ClubName = reader.GetString(1),
+                                Country = reader["Country"].ToString(),
+                                FoundedYear = (int)reader[3],
+                                StadiumName = (string)reader.GetValue(4),
+                                Capacity = reader.GetInt32(5)
+                            };
+                            clubs.Add(club);
+                        }
+                    }
+                }
+            }
+            return clubs;
+        }
     }
 }

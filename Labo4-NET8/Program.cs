@@ -11,14 +11,20 @@ internal class Program
         // Gebruik de connectionstring uit de Settings file om een connectie te openen
         Data.ConnectionString = Settings.Default.ConnectionString;
 
-        Data.CreateClub();
+        if(Data.CreateClub() == 1)
+        {
+            Console.WriteLine("Club succesvol aangemaakt.");
+        }
 
         // DELETE
         // Verwijder Arsenal uit de tabel met behulp van een SqlCommand en SqlParameter.
         Console.WriteLine("Welke ploeg wilt u verwijderen?");
         string clubName = Console.ReadLine();
 
-        Data.DeleteClub(clubName);
+        if(Data.DeleteClub(clubName) == 1)
+        {
+            Console.WriteLine("Club succesvol verwijderd.");
+        }
 
         // Deel 3
         // Implementeer UpdateCapacityById() en gebruik een try catch waar nodig    
@@ -27,8 +33,14 @@ internal class Program
         Console.WriteLine("Geef een nieuwe capaciteit in:");
         int capacity = int.Parse(Console.ReadLine());
 
-        Data.UpdateCapacityById(id, capacity);
-    }
+        if(Data.UpdateCapacityById(id, capacity) == 1)
+        {
+            Console.WriteLine("Capaciteit succesvol aangepast.");
+        }
 
-    
+        foreach(FootballClub club in Data.GetAllClubs())
+        {
+            Console.WriteLine(club.ToString());
+        }
+    }
 }
